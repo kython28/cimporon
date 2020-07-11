@@ -13,7 +13,7 @@ if (file == NULL){
   // Error
 }
 ```
-Well, now you can use all Cimporon functions. So, we'll some examples... If you want to add a key:
+Well, now you can use all Cimporon functions. So, we'll see some examples... If you want to add a key:
 ```C
 uint64_t key = 30;
 int64_t value = 666;
