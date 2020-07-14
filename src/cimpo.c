@@ -253,9 +253,9 @@ uint8_t removeKey(cimpo *file, uint64_t key){
 	if (file == NULL || key == 0){
 		return 1;
 	}
-	uint64_t curr, curr2=0, curr3;
+	uint64_t curr, curr2=0, curr3=0;
 
-	cimpo_node node, node2, node3;
+	cimpo_node node, node2;
 	memset(&node, 0, 32);
 
 	if (file->size > 8){
@@ -354,7 +354,7 @@ uint8_t removeKey(cimpo *file, uint64_t key){
 			lseek(file->fd, 8, SEEK_SET);
 			return 1;
 		}
-	}else{
+	}else if (curr3 > 0){
 		lseek(file->fd, curr3, SEEK_SET);
 		node2.key = 0;
 		node2.value = 0;
