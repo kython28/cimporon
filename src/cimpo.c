@@ -31,6 +31,8 @@ cimpo *openFile(const char *name){
 		}
 	}
 
+	file->name = (char*) calloc(strlen(name), 1);
+
 	size = lseek(file->fd, 0, SEEK_END);
 	if (size == 0){
 		size = write(file->fd, &CIMPO_SIGNATURE, 8);
@@ -56,10 +58,26 @@ cimpo *openFile(const char *name){
 	return file;
 }
 
+void clearCimpoFile(cimpo *file){
+	close(file->fd);
+	file->fd = open(file->name, O_TRUNC|O_RDWR, S_IRUSR|S_IWUSR|S_IRGRP|S_IROTH);
+	
+	uint64_t CIMPO_SIGNATURE = 0x0000004F504D4943;
+	if (write(file->fd, &CIMPO_SIGNATURE, 8) != 8){
+		closeCimpoFile(file);
+		return;
+	}
+
+	lseek(file->fd, 0, SEEK_SET);
+	file->size = lseek(file->fd, 0, SEEK_END);
+	lseek(file->fd, 8, SEEK_SET);
+}
+
 void closeCimpoFile(cimpo *file){
 	if (file == NULL){
 		return;
 	}
+	free(file->name);
 	close(file->fd);
 	free(file);
 }
